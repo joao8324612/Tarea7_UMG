@@ -48,7 +48,4 @@ jobs:
           name: quality-gate-lab-report
           path: reports-lab/
           if-no-files-found: warn
-      - name: Descargar codigo
-        uses: actions/checkout@v4
-
-      - name: Analizar dependencias del laboratorio
+    
