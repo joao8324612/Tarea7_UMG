@@ -42,3 +42,26 @@ jobs:
           name: semgrep-sarif-report
           path: semgrep-results.sarif
           if-no-files-found: error
+
+  sbom-cyclonedx:
+    name: SBOM - CycloneDX
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Generar SBOM con Syft
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: cyclonedx-json
+          output-file: sbom.cyclonedx.json
+          upload-artifact: false
+
+      - name: Guardar SBOM como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-cyclonedx
+          path: sbom.cyclonedx.json
+          if-no-files-found: error
