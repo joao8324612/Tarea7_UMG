@@ -22,6 +22,15 @@ jobs:
       - name: Descargar codigo
         uses: actions/checkout@v4
 
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Instalar dependencias del laboratorio
+        working-directory: laboratorio-quality-gate
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
       - name: Analizar dependencias del laboratorio
         uses: dependency-check/Dependency-Check_Action@main
         with:
@@ -39,3 +48,7 @@ jobs:
           name: quality-gate-lab-report
           path: reports-lab/
           if-no-files-found: warn
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Analizar dependencias del laboratorio
