@@ -1,0 +1,41 @@
+
+name: Quality Gate - Laboratorio SUCCESS
+
+on:
+  push:
+    branches:
+      - validacion-quality-gate
+    paths:
+      - 'laboratorio-quality-gate/**'
+      - '.github/workflows/quality-gate-lab.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sca-laboratorio:
+    name: SCA - Validacion Quality Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Analizar dependencias del laboratorio
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'Laboratorio-Quality-Gate'
+          path: 'laboratorio-quality-gate'
+          format: 'ALL'
+          out: 'reports-lab'
+          args: >
+            --failOnCVSS 7
+
+      - name: Guardar reporte del laboratorio
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-gate-lab-report
+          path: reports-lab/
+          if-no-files-found: warn
